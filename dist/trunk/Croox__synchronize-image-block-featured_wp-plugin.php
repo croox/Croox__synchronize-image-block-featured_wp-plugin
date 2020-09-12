@@ -3,7 +3,7 @@
 	Plugin Name: Croox Synchronize image block with featured image
 	Plugin URI: https://github.com/croox/Croox__synchronize-image-block-featured_wp-plugin
 	Description: Add option to synchronize the core/image block with the post featured image.
-	Version: 0.0.1
+	Version: 0.0.2
 	Author: croox
 	Author URI: https://github.com/croox
 	License: GNU General Public License v2 or later
@@ -31,7 +31,7 @@ include_once( dirname( __FILE__ ) . '/vendor/autoload.php' );
 function imfea_init() {
 
 	$init_args = array(
-		'version'		=> '0.0.1',
+		'version'		=> '0.0.2',
 		'slug'			=> 'Croox__synchronize-image-block-featured_wp-plugin',
 		'name'			=> 'Croox Synchronize image block with featured image',
 		'prefix'		=> 'imfea',

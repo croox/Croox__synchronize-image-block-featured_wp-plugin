@@ -3,35 +3,35 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/js/imfea_editor.js:157
+#: src/js/imfea_editor.js:152
 msgid ""
-"Image block is synchronized with featured image. Impossible to use an "
+"This image block is synchronized with featured image. Impossible to use an "
 "external URL as image source."
 msgstr ""
 
-#: src/js/imfea_editor.js:186
+#: src/js/imfea_editor.js:184
 msgid "Synchronize with Featured image"
 msgstr ""
 
-#: src/js/imfea_editor.js:189
+#: src/js/imfea_editor.js:187
 msgid ""
 "This Image Block is synchronized with the featured image. They update each "
 "other."
 msgstr ""
 
-#: src/js/imfea_editor.js:191
+#: src/js/imfea_editor.js:189
 msgid ""
 "This Image Block is not synchronized with the featured image. But by chance "
 "they are the same."
 msgstr ""
 
-#: src/js/imfea_editor.js:193
+#: src/js/imfea_editor.js:191
 msgid ""
 "This Image Block is not synchronized with the featured image. On "
 "synchronize, this block will receive the featured image."
 msgstr ""
 
-#: src/js/imfea_editor.js:194
+#: src/js/imfea_editor.js:192
 msgid ""
 "This Image Block is not synchronized with the featured image. No featured "
 "image is set. On synchronize, the featured image will receive this block "
