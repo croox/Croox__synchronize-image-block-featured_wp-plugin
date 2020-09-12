@@ -28,8 +28,6 @@ class Imfea extends wde\Plugin {
 				'wp-hooks',
 				'wp-data',
 				'wp-i18n',
-				'wp-blocks',
-				'wp-dom-ready',
 				'wp-edit-post',
 			),
 			'in_footer'		=> true,	// default false

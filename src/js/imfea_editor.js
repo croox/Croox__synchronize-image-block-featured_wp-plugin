@@ -10,15 +10,10 @@ import { get, pick } from 'lodash';
 const { __ } = wp.i18n;
 const { addFilter } = wp.hooks;
 const { createHigherOrderComponent } = wp.compose;
-const { withSelect, withDispatch } = wp.data;
-const { compose } = wp.compose;
+const { useSelect, useDispatch } = wp.data;
 const { InspectorControls } = wp.editor;
 const { useEffect } = wp.element;
 const { PanelBody, ToggleControl } = wp.components;
-
-
-
-
 
 /**
  * Add Block attributes to image block.
@@ -38,38 +33,21 @@ addFilter( 'blocks.registerBlockType', 'imfea.addBlockAttributes', ( settings, n
 	},
 } : settings );
 
-addFilter( 'editor.BlockEdit', 'imfea.BlockEdit.test', createHigherOrderComponent( BlockEdit => compose( [
-	withSelect( ( select ) => {
-		const {
-			getEditedPostAttribute,
-			getCurrentPostType,
-		} = select( 'core/editor');
-		const {
-			getPostTypes,
-			getMedia,
-		} = select( 'core');
-		const postTypes = getPostTypes();
-		const currentPostType = getCurrentPostType();
-		const currentPostTypeObj = Array.isArray( postTypes ) ? [...postTypes].find( type => currentPostType === type.slug ) : null;
-		const featuredMediaId = getEditedPostAttribute( 'featured_media' );
-		return {
-			featuredMediaId,
-			featuredMedia: featuredMediaId ? getMedia( featuredMediaId ) : null,
-			supportsFeatured: currentPostTypeObj ? currentPostTypeObj.supports.thumbnail : false,
-		 };
-	} ),
-	withDispatch( ( dispatch ) => {
-		const { editPost } = dispatch( 'core/editor' );
-		const { createErrorNotice } = dispatch( 'core/notices' );
-		return {
-			editPost,
-			createErrorNotice,
-		};
-	} ),
-] )( props => {
+/**
+ * Image BlockEdit Container Component
+ *
+ * Takes original BlockEdit as prop.
+ *
+ * Adds inspector panel with toggle control.
+ * Updates block attributes if post featured changes.
+ * Updates post featured image if block attributes image change.
+ */
+const ImageSyncBlockEdit = ( {
+    BlockEdit,
+    ...props
+} ) => {
 
 	const {
-		name,
 		attributes: {
 			imfeaShouldSync,
 			imfeaShouldSyncLock,
@@ -77,25 +55,45 @@ addFilter( 'editor.BlockEdit', 'imfea.BlockEdit.test', createHigherOrderComponen
 			url,
 			linkDestination,
 		},
-		setAttributes,
-		editPost,
-		featuredMediaId,
-		featuredMedia,
-		supportsFeatured,
-		createErrorNotice,
+        setAttributes,
     } = props;
 
-    const isImageBlock = () => name === 'core/image'		// Make sure only affects image block
-        && ! url.startsWith( 'https://s.w.org/images/core' ) 	// Get out if block is just a block style control
-        && supportsFeatured								// Get out if postType doesn't support featured image
+    const { editPost } = useDispatch( 'core/editor' );
+    const { createErrorNotice } = useDispatch( 'core/notices' );
+
+    const {
+        currentPostTypeObj,
+        featuredMediaId,
+        featuredMedia,
+    } = useSelect( ( select ) => {
+        const {
+            getEditedPostAttribute,
+            getCurrentPostType,
+        } = select( 'core/editor');
+
+        const {
+            getPostTypes,
+            getMedia,
+        } = select( 'core');
+
+        const postTypes = getPostTypes();
+        const currentPostType = getCurrentPostType();
+        const featuredMediaId = getEditedPostAttribute( 'featured_media' );
+
+		return {
+            currentPostTypeObj: Array.isArray( postTypes ) ? [...postTypes].find( type => currentPostType === type.slug ) : null,
+            featuredMediaId,
+            featuredMedia: featuredMediaId ? getMedia( featuredMediaId ) : null,
+        };
+    }, [] );
 
 	// Update block image from featured image.
 	// if not locked || ...
 	useEffect( () => {
-        if ( ! isImageBlock()
-            || imfeaShouldSyncLock
+        if ( imfeaShouldSyncLock
 			|| ! imfeaShouldSync
-			|| ! featuredMediaId
+            || ! featuredMediaId
+            || ! currentPostTypeObj || ! currentPostTypeObj.supports.thumbnail
 			|| id === featuredMediaId
 			|| 0 == featuredMediaId
 			|| ! featuredMedia
@@ -130,11 +128,11 @@ addFilter( 'editor.BlockEdit', 'imfea.BlockEdit.test', createHigherOrderComponen
 		} );
     } );
 
-	if ( ! isImageBlock() ) {
+    if ( ( ! currentPostTypeObj || ! currentPostTypeObj.supports.thumbnail )
+        || ( url && url.startsWith( 'https://s.w.org/images/core' ) )
+    ) {
 		return <BlockEdit {...props}/>;
 	}
-    console.log('debug ???: props', isImageBlock(), props);
-
 
 	/**
 	 * Overwrite setAttributes
@@ -200,9 +198,17 @@ addFilter( 'editor.BlockEdit', 'imfea.BlockEdit.test', createHigherOrderComponen
 			</PanelBody>
 		</InspectorControls>
 
-		<BlockEdit {...{
-			...props,
-			setAttributes: setAttributesFeaturedSync,
-		}}/>
+        <BlockEdit {...{
+            ...props,
+            setAttributes: setAttributesFeaturedSync,
+        }}/>
 	</>;
-} ), "withInnerBlocksIds" ) );
+};
+
+/**
+ * Filter BlockEdit, use Container Component if core/image
+ */
+addFilter( 'editor.BlockEdit', 'imfea.BlockEdit', createHigherOrderComponent( BlockEdit => props => 'core/image' === props.name
+    ? <ImageSyncBlockEdit {...{ ...props, BlockEdit }}/>
+    : <BlockEdit {...props}/>
+) );
