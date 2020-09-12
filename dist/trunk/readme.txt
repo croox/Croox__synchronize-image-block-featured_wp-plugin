@@ -30,5 +30,11 @@ Upload and install this Theme the same way you'd install any other Theme.
 
 == Changelog ==
 
+## 0.0.2 - 2020-09-12
+Fix setAttributes
+
+### Fixed
+- setAttributes
+
 ## 0.0.1 - 2020-09-12
 Basic

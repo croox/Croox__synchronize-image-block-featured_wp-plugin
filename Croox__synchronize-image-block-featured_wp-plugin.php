@@ -3,7 +3,7 @@
 	Plugin Name: Croox Synchronize image block with featured image
 	Plugin URI: https://github.com/croox/Croox__synchronize-image-block-featured_wp-plugin
 	Description: Add option to synchronize the core/image block with the post featured image.
-	Version: 0.0.1
+	Version: 0.0.2
 	Author: croox
 	Author URI: https://github.com/croox
 	License: GNU General Public License v2 or later

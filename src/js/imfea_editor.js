@@ -144,23 +144,21 @@ const ImageSyncBlockEdit = ( {
 		// Just set attributes if disabled sync
 		const shouldSync = newAttributes.imfeaShouldSync ? newAttributes.imfeaShouldSync : imfeaShouldSync;
 		if ( ! shouldSync )
-			return setAttributes( newAttributes ) ;
-
-		// Just set attributes if block image did not change
-		const isImageChange = id !== newAttributes.id;
-		if ( ! isImageChange )
-			return setAttributes( newAttributes ) ;
+            return setAttributes( newAttributes ) ;
 
 		// Interrupt if image is url and not local media
-		if ( undefined == newAttributes.id ) {
+		if ( undefined == newAttributes.id && newAttributes.url ) {
 			return createErrorNotice(
-				__( 'Image block is synchronized with featured image. Impossible to use an external URL as image source.', 'imfea' ),
+				__( 'This image block is synchronized with featured image. Impossible to use an external URL as image source.', 'imfea' ),
 				{
 					id: 'image-sync-can-not-set-url',
 					type: 'snackbar',
 				}
 			);
-		}
+        }
+
+		if ( id === newAttributes.id || ! newAttributes.id )
+			return setAttributes( newAttributes ) ;
 
 		// Set attributes
 		// and disable that the block receives featured image for a moment.
