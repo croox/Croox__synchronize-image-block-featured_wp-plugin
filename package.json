@@ -1,0 +1,39 @@
+{
+  "name": "Croox__synchronize-image-block-featured_wp-plugin",
+  "displayName": "Synchronize image block with featured image",
+  "funcPrefix": "imfea",
+  "uri": "https://github.com/croox/Croox__synchronize-image-block-featured_wp-plugin",
+  "textDomain": "imfea",
+  "domainPath": "/languages",
+  "version": "0.0.0",
+  "description": "Adds an option to synchronize a core/image block with the post featured image.",
+  "main": "index.js",
+  "author": "croox",
+  "authorUri": "https://github.com/croox",
+  "projectType": "plugin",
+  "contributors": "croox",
+  "license": "GNU General Public License v2 or later",
+  "licenseUri": "http://www.gnu.org/licenses/gpl-2.0.html",
+  "tags": "image,block,featured,sync,synchronize",
+  "donateLink": "https://github.com/croox/donate",
+  "repositoryUri": "https://github.com/croox/Croox__synchronize-image-block-featured_wp-plugin",
+  "wpVersionTested": "5.4.0",
+  "wpRequiresAtLeast": "5.0.0",
+  "phpRequiresAtLeast": "5.6.0",
+  "generator": {
+    "version": "0.16.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "grunt": "^1.3.0",
+    "wp-dev-env-grunt": "git+ssh://git@github.com/croox/wp-dev-env-grunt.git#0.11.1"
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery",
+    "react": "global:React",
+    "react-dom": "global:ReactDOM",
+    "lodash": "global:lodash"
+  }
+}
